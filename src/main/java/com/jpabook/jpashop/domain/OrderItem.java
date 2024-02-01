@@ -1,5 +1,6 @@
 package com.jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jpabook.jpashop.domain.item.Item;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,13 +11,11 @@ import lombok.Setter;
 import static jakarta.persistence.FetchType.*;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     @Column(name = "order_item_id")
     private Long id;
 
@@ -24,6 +23,7 @@ public class OrderItem {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
@@ -51,10 +51,9 @@ public class OrderItem {
 
     /**
      * 주문상품 전체 가격 조회
-     *
-     * @return totalPrice
      */
     public int getTotalPrice() {
         return getOrderPrice() * getCount();
     }
 }
+

@@ -1,10 +1,12 @@
 package com.jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -91,12 +93,11 @@ public class Order {
      * 전체 주문 가격 조회
      */
     public int getTotalPrice() {
-        return orderItems.stream().mapToInt(OrderItem::getTotalPrice).sum();
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
     }
+
 }
-
-
-
-
-
-
